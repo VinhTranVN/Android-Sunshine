@@ -17,16 +17,15 @@ import vinhtt.example.android_sunshine.model.Forecast;
  */
 public class ItemForecastAdapter extends ArrayAdapter<Forecast> {
 
-    private List<Forecast> itemList;
-
-    private Context context;
-    private LayoutInflater layoutInflater;
+    private List<Forecast> mItemList;
+    private Context mContext;
+    private LayoutInflater mLayoutInflater;
 
     public ItemForecastAdapter(Context context, List<Forecast> items) {
         super(context, 0, items);
-        this.context = context;
-        this.layoutInflater = LayoutInflater.from(context);
-        itemList = items;
+        this.mContext = context;
+        this.mLayoutInflater = LayoutInflater.from(context);
+        mItemList = items;
     }
 
     @Override
@@ -34,13 +33,13 @@ public class ItemForecastAdapter extends ArrayAdapter<Forecast> {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = layoutInflater.inflate(R.layout.item_forecast, null);
+            convertView = mLayoutInflater.inflate(R.layout.item_forecast, null);
             holder.title = (TextView) convertView.findViewById(R.id.textView);
             convertView.setTag(holder);
         }
 
         holder = (ViewHolder) convertView.getTag();
-        Forecast item = itemList.get(position);
+        Forecast item = mItemList.get(position);
         holder.title.setText(item.toString());
 
         return convertView;

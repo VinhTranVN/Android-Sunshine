@@ -1,5 +1,6 @@
 package vinhtt.example.android_sunshine.ui.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import vinhtt.example.android_sunshine.MyApplication;
 import vinhtt.example.android_sunshine.R;
 import vinhtt.example.android_sunshine.model.Forecast;
 import vinhtt.example.android_sunshine.model.WeatherInfo;
+import vinhtt.example.android_sunshine.ui.activities.DetailActivity;
 import vinhtt.example.android_sunshine.ui.adapters.ItemForecastAdapter;
 
 /**
@@ -46,11 +48,16 @@ public class MainActivityFragment extends Fragment {
         mAdapter = new ItemForecastAdapter(getActivity(), mForecastList);
         mListView.setAdapter(mAdapter);
 
+        // handle item click on listview
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Forecast forecast = mForecastList.get(position);
                 Toast.makeText(getActivity(), forecast.toString(), Toast.LENGTH_SHORT).show();
+                // Explicit intent : start DetailActivity
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("DATA", forecast.toString());
+                startActivity(intent);
             }
         });
 
