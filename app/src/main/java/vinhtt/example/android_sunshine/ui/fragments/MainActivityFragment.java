@@ -6,9 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import vinhtt.example.android_sunshine.MyApplication;
@@ -24,6 +27,8 @@ public class MainActivityFragment extends Fragment {
 
     private ProgressBar mProgressBar;
     private ListView mListView;
+    private List<Forecast> mForecastList = new ArrayList<>();
+    private ItemForecastAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,9 +43,23 @@ public class MainActivityFragment extends Fragment {
         mListView = (ListView) view.findViewById(R.id.listView);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        // Defined Array weathers to show in ListView
-        new AsyncTask<Void, Void, WeatherInfo>(){
+        mAdapter = new ItemForecastAdapter(getActivity(), mForecastList);
+        mListView.setAdapter(mAdapter);
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Forecast forecast = mForecastList.get(position);
+                Toast.makeText(getActivity(), forecast.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        loadData();
+    }
+
+    private void loadData() {
+        // Defined Array weathers to show in ListView
+        new AsyncTask<Void, Void, WeatherInfo>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -54,19 +73,13 @@ public class MainActivityFragment extends Fragment {
 
             @Override
             protected void onPostExecute(WeatherInfo weatherInfo) {
-                if(getActivity() == null){
-                    return;
-                }
-
                 mProgressBar.setVisibility(View.GONE);
-                if (weatherInfo != null){
-                    List<Forecast> forecastList = weatherInfo.getForecast();
-                    ItemForecastAdapter adapter = new ItemForecastAdapter(getActivity(), forecastList);
-                    // Assign adapter to ListView
-                    mListView.setAdapter(adapter);
+                if (weatherInfo != null) {
+                    mForecastList.clear();
+                    mForecastList.addAll(weatherInfo.getForecast());
+                    mAdapter.notifyDataSetChanged(); // update data on listview
                 }
             }
         }.execute();
-
     }
 }

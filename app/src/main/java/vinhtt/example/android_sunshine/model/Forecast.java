@@ -67,4 +67,9 @@ public class Forecast {
     public void setText(String text) {
         this.text = text;
     }
+
+    @Override
+    public String toString() {
+        return day + ", " + date + ", " + high + "/" + low + ", " + text;
+    }
 }

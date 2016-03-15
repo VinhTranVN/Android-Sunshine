@@ -41,7 +41,7 @@ public class ItemForecastAdapter extends ArrayAdapter<Forecast> {
 
         holder = (ViewHolder) convertView.getTag();
         Forecast item = itemList.get(position);
-        holder.title.setText(item.getText());
+        holder.title.setText(item.toString());
 
         return convertView;
     }
