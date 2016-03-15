@@ -1,6 +1,5 @@
 package vinhtt.example.android_sunshine.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -9,22 +8,63 @@ import com.google.gson.annotations.SerializedName;
 public class Forecast {
 
     @SerializedName("code")
-    @Expose
-    public String code;
+    private String code;
     @SerializedName("date")
-    @Expose
-    public String date;
+    private String date;
     @SerializedName("day")
-    @Expose
-    public String day;
+    private String day;
     @SerializedName("high")
-    @Expose
-    public String high;
+    private String high;
     @SerializedName("low")
-    @Expose
-    public String low;
+    private String low;
     @SerializedName("text")
-    @Expose
-    public String text;
+    private String text;
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getHigh() {
+        return high;
+    }
+
+    public void setHigh(String high) {
+        this.high = high;
+    }
+
+    public String getLow() {
+        return low;
+    }
+
+    public void setLow(String low) {
+        this.low = low;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

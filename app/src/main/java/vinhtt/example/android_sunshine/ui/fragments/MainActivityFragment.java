@@ -3,28 +3,30 @@ package vinhtt.example.android_sunshine.ui.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+
+import java.util.List;
 
 import vinhtt.example.android_sunshine.MyApplication;
 import vinhtt.example.android_sunshine.R;
+import vinhtt.example.android_sunshine.model.Forecast;
 import vinhtt.example.android_sunshine.model.WeatherInfo;
+import vinhtt.example.android_sunshine.ui.adapters.ItemForecastAdapter;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
 
-    public MainActivityFragment() {
-    }
+    private ProgressBar mProgressBar;
+    private ListView mListView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
@@ -33,19 +35,18 @@ public class MainActivityFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get ListView object from xml
-        ListView listView = (ListView) view.findViewById(R.id.listView);
+        mListView = (ListView) view.findViewById(R.id.listView);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         // Defined Array weathers to show in ListView
-        String[] weathers = new String[] {
-                "Today - Sunny - 88/63",
-                "Tomorrow - Sunny - 88/63",
-                "Thu - Sunny - 88/63",
-                "Fri - Sunny - 88/63",
-                "Sat - Sunny - 88/63",
-                "Sun - Sunny - 88/63"
-        };
-
         new AsyncTask<Void, Void, WeatherInfo>(){
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+
             @Override
             protected WeatherInfo doInBackground(Void... params) {
                 return MyApplication.getServiceFactory().getWeatherService().getWeatherInfo();
@@ -53,19 +54,19 @@ public class MainActivityFragment extends Fragment {
 
             @Override
             protected void onPostExecute(WeatherInfo weatherInfo) {
-                Log.d("TEST", "VTT>>> weatherInfo " + weatherInfo);
-                if (weatherInfo != null){
-                    Log.d("TEST", "VTT>>> weatherInfo : " + weatherInfo.getForecast().toString());
+                if(getActivity() == null){
+                    return;
+                }
 
+                mProgressBar.setVisibility(View.GONE);
+                if (weatherInfo != null){
+                    List<Forecast> forecastList = weatherInfo.getForecast();
+                    ItemForecastAdapter adapter = new ItemForecastAdapter(getActivity(), forecastList);
+                    // Assign adapter to ListView
+                    mListView.setAdapter(adapter);
                 }
             }
         }.execute();
 
-
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, weathers);
-
-        // Assign adapter to ListView
-        listView.setAdapter(adapter);
     }
 }

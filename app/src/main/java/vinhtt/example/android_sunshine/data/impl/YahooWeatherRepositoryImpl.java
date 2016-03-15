@@ -1,15 +1,9 @@
 package vinhtt.example.android_sunshine.data.impl;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import vinhtt.example.android_sunshine.data.WeatherRepository;
 import vinhtt.example.android_sunshine.model.WeatherInfo;
-import vinhtt.example.android_sunshine.utils.HttpRequestUtil;
 
 /**
  * Created by VinhTT on 14-Mar-16.
@@ -19,7 +13,7 @@ public class YahooWeatherRepositoryImpl implements WeatherRepository {
     @Override
     public WeatherInfo getWeatherInfo() {
         // TODO get weather info
-        try {
+        /*try {
             String dataResponse = HttpRequestUtil.makeRequest(WS_URL);
             JSONObject jsonObject = new JSONObject(dataResponse);
             JSONObject item = jsonObject.getJSONObject("query")
@@ -34,6 +28,13 @@ public class YahooWeatherRepositoryImpl implements WeatherRepository {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return  null;
+        return null;
+        */
+
+        Gson gson = new Gson();
+        String json = "{\"forecast\":[{\"code\":\"29\",\"date\":\"15 Mar 2016\",\"day\":\"Tue\",\"high\":\"92\",\"low\":\"77\",\"text\":\"Partly Cloudy\"},{\"code\":\"30\",\"date\":\"16 Mar 2016\",\"day\":\"Wed\",\"high\":\"95\",\"low\":\"77\",\"text\":\"Partly Cloudy\"},{\"code\":\"30\",\"date\":\"17 Mar 2016\",\"day\":\"Thu\",\"high\":\"91\",\"low\":\"76\",\"text\":\"Partly Cloudy\"},{\"code\":\"30\",\"date\":\"18 Mar 2016\",\"day\":\"Fri\",\"high\":\"92\",\"low\":\"75\",\"text\":\"Partly Cloudy\"},{\"code\":\"34\",\"date\":\"19 Mar 2016\",\"day\":\"Sat\",\"high\":\"95\",\"low\":\"76\",\"text\":\"Mostly Sunny\"}]}";
+        WeatherInfo weatherInfo = gson.fromJson(json, WeatherInfo.class);
+
+        return  weatherInfo;
     }
 }
